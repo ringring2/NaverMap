@@ -27,10 +27,10 @@ import android.widget.Toast;
 import android.os.Build;
 
 public class MainActivity extends NMapActivity {
-	NMapView mMapView;		//MapView °´Ã¼(Áöµµ »ı¼º, Áöµµµ¥ÀÌÅÍ)
-	NMapController mMapController;	//Áöµµ »óÅÂ ÄÁÆ®·Ñ °´Ã¼
-	OnMapStateChangeListener onMapViewStateChangeListener;	//Áöµµ»óÅÂ º¯°æ ¹ß»ı ÀÌº¥Æ® Ã³¸®
-	OnMapViewTouchEventListener onMapViewTouchEventListener; //ÅÍÄ¡ ¹ß»ı ÀÌº¥Æ® Ã³¸®
+	NMapView mMapView;		//MapView ê°ì²´(ì§€ë„ ìƒì„±, ì§€ë„ë°ì´í„°)
+	NMapController mMapController;	//ì§€ë„ ìƒíƒœ ì»¨íŠ¸ë¡¤ ê°ì²´
+	OnMapStateChangeListener onMapViewStateChangeListener;	//ì§€ë„ìƒíƒœ ë³€ê²½ ë°œìƒ ì´ë²¤íŠ¸ ì²˜ë¦¬
+	OnMapViewTouchEventListener onMapViewTouchEventListener; //í„°ì¹˜ ë°œìƒ ì´ë²¤íŠ¸ ì²˜ë¦¬
 
 	
 	
@@ -48,26 +48,26 @@ public class MainActivity extends NMapActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		//Áöµµ È­¸é »ı¼º
+		//ì§€ë„ í™”ë©´ ìƒì„±
 		mMapView = new NMapView(this);
 		
-		//API Å° ¼³Á¤
+		//API í‚¤ ì„¤ì •
 		mMapView.setApiKey("44cfbc1908a24ed56d0fdb6d9fc1c4b8");
 		
-		//Áöµµ È­¸é ÃÊ±âÈ­
+		//ì§€ë„ í™”ë©´ ì´ˆê¸°í™”
 		mMapView.setClickable(true);
 		
-		//Áöµµ »óÅÂ º¯È­¸¦ À§ÇÑ listener µî·Ï
+		//ì§€ë„ ìƒíƒœ ë³€í™”ë¥¼ ìœ„í•œ listener ë“±ë¡
 		mMapView.setOnMapStateChangeListener(onMapViewStateChangeListener);
 		mMapView.setOnMapViewTouchEventListener(onMapViewTouchEventListener);
 		
-		//Áöµµ ÄÁÆ®·Ñ·¯(ÁÜ ÀÎ/¾Æ¿ô µî) »ç¿ë
+		//ì§€ë„ ì»¨íŠ¸ë¡¤ëŸ¬(ì¤Œ ì¸/ì•„ì›ƒ ë“±) ì‚¬ìš©
 		mMapController = mMapView.getMapController();
 		
-		// ÁÜ ÀÎ/¾Æ¿ô ¹öÆ° »ı¼º
+		// ì¤Œ ì¸/ì•„ì›ƒ ë²„íŠ¼ ìƒì„±
         mMapView.setBuiltInZoomControls(true, null);
         
-        //È­¸é¿¡ Áöµµ Ç¥½Ã
+        //í™”ë©´ì— ì§€ë„ í‘œì‹œ
         setContentView(mMapView);
         
         mMapViewerResourceProvider = new NMapViewerResourceProvider(this);
@@ -77,7 +77,7 @@ public class MainActivity extends NMapActivity {
         
         int markerId = NMapPOIflagType.PIN;
 
-	     // set POI data
+	     // set POI data	
 	     NMapPOIdata poiData = new NMapPOIdata(2, mMapViewerResourceProvider);
 	     poiData.beginPOIdata(2);
 	     poiData.addPOIitem(127.0630205, 37.5091300, "Pizza 777-111", markerId, 0);
@@ -101,7 +101,8 @@ public class MainActivity extends NMapActivity {
 //	     setContentView(mMapContainerView);
 	}
 	
-	public void onMapInitHandler(NMapView mapView, NMapError errorInfo) {
+	public void onMapInitHandler(NMapView mapView, NMapError errorInfo) //ì„±ê³µ ì‹œ ì§€ë„í™”ë©´ì„ ìƒì„±,ì˜¤ë¥˜ ì‹œ ê¸°ë¡.
+	{
         if (errorInfo == null) { // success
                 mMapController.setMapCenter(new NGeoPoint(126.978371, 37.5666091), 11);
         } else { // fail
@@ -109,32 +110,41 @@ public class MainActivity extends NMapActivity {
         }
 	} 
 
-	public void onCalloutClick(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
-        // [[TEMP]] handle a click event of the callout
+	public void onCalloutClick(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item)
+	{
+        // [[TEMP]] handle a click event of the callout // ì½œì•„ì›ƒ í´ë¦­ì´ë²¤íŠ¸ë¥¼ ì²˜ë¦¬í•œë‹¤.
 	        Toast.makeText(MainActivity.this, "onCalloutClick: " + item.getTitle(), Toast.LENGTH_LONG).show();
 	}
 
-	public void onFocusChanged(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
-	        if (item != null) {
+	public void onFocusChanged(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) //ì´ˆì ì„ ìˆ˜ì •,ê¸°ë¡í•´ì¤Œ.
+	{
+	        if (item != null) 
+		{
 	        	 Log.i("MAP", "onFocusChanged: " + item.toString());
-	        } else {
+	        }
+		else 
+		{
 	        	 Log.i("MAP", "onFocusChanged: ");
 	        }
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu) 
+	{
 
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		// ë©”ë‰´ë¥¼ ê°€ì••í•©ë‹ˆë‹¤; ê·¸ëŸ¬ë©´ í•­ëª©í‘œì‹œì¤„ì— ì¶”ê°€ë©ë‹ˆë‹¤.(ìˆëŠ”ê²½ìš°)
+		getMenuInflater().inflate(R.menu.main, menu); //
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
+		// Handle action bar item clicks here. ì—¬ê¸°ì„œ ì‘ì—…í‘œì‹œì¤„ í•­ëª© í´ë¦­ ì²˜ë¦¬. 	
+		// The action bar will automatically handle clicks on the Home/Up button, so long
+		// ì‘ì—… í‘œì‹œì¤„ì—ì„œ í™ˆë²„íŠ¼ í´ë¦­ì„ ìë™ìœ¼ë¡œ ì²˜ë¦¬í•©ë‹ˆë‹¤.
 		// as you specify a parent activity in AndroidManifest.xml.
+		// AndroidManifest.xml.ì—ì„œ ìƒìœ„ í™œë™ì„ ì§€ì •í•˜ëŠ” ê²½ìš°
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
@@ -145,32 +155,37 @@ public class MainActivity extends NMapActivity {
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class PlaceholderFragment extends Fragment {
+	public static class PlaceholderFragment extends Fragment
+	{
 
-		public PlaceholderFragment() {
+		public PlaceholderFragment() 
+		{
 		}
 
 		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) 
+		{
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
 			return rootView;
 		}
 	}
 	
-	private class MapContainerView extends ViewGroup {
+	private class MapContainerView extends ViewGroup 
+	{
 
 		public MapContainerView(Context context) {
 			super(context);
 		}
 
 		@Override
-		protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+		protected void onLayout(boolean changed, int left, int top, int right, int bottom) 
+		{
 			final int width = getWidth();
 			final int height = getHeight();
 			final int count = getChildCount();
-			for (int i = 0; i < count; i++) {
+			for (int i = 0; i < count; i++) 
+			{
 				final View view = getChildAt(i);
 				final int childWidth = view.getMeasuredWidth();
 				final int childHeight = view.getMeasuredHeight();
@@ -179,24 +194,29 @@ public class MainActivity extends NMapActivity {
 				view.layout(childLeft, childTop, childLeft + childWidth, childTop + childHeight);
 			}
 
-			if (changed) {
+			if (changed) 
+			{
 				mOverlayManager.onSizeChanged(width, height);
 			}
 		}
 
 		@Override
-		protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)  //ê±°ë¦¬ ì¸¡ì •ì‹œ 
+		{
 			int w = getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec);
 			int h = getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec);
 			int sizeSpecWidth = widthMeasureSpec;
 			int sizeSpecHeight = heightMeasureSpec;
 
 			final int count = getChildCount();
-			for (int i = 0; i < count; i++) {
+			for (int i = 0; i < count; i++) 
+			{
 				final View view = getChildAt(i);
 
-				if (view instanceof NMapView) {
-					if (mMapView.isAutoRotateEnabled()) {
+				if (view instanceof NMapView) 
+				{
+					if (mMapView.isAutoRotateEnabled()) 
+					{
 						int diag = (((int)(Math.sqrt(w * w + h * h)) + 1) / 2 * 2);
 						sizeSpecWidth = MeasureSpec.makeMeasureSpec(diag, MeasureSpec.EXACTLY);
 						sizeSpecHeight = sizeSpecWidth;
